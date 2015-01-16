@@ -19,20 +19,10 @@ class FindMyIPhone(object):
 
     def get_partition(self):
         # TODO: log if debug
-        body = json.dumps({
-            "clientContext":{
-                "appName":"FindMyiPhone",
-                "appVersion":"1.4",
-                "buildVersion":"145",
-                "deviceUDID":"0000000000000000000000000000000000000000",
-                "inactiveTime":2147483647,
-                "osVersion":"4.2.1",
-                "personID":0,
-                "productType":"iPad1,1"
-            }
-        })
+        body = json.dumps({})
         headers, content = self.post('/fmipservice/device/%s/initClient' % self.username, body, None, True)
         self.partition = headers.get('X-Apple-MMe-Host')
+        self.scope = headers.get('X-Apple-MMe-Scope')
 
     def locate(self, device_num=0, max_wait=300):
         start = int(time.time())
@@ -182,19 +172,8 @@ class FindMyIPhone(object):
 
     def update_devices(self):
         # log 'updateDevices...'
-        body = json.dumps({
-            "clientContext":{
-                "appName":"FindMyiPhone",
-                "appVersion":"1.4",
-                "buildVersion":"145",
-                "deviceUDID":"0000000000000000000000000000000000000000",
-                "inactiveTime":2147483647,
-                "osVersion":"4.2.1",
-                "personID":0,
-                "productType":"iPad1,1"
-            }
-        })
-        header, json_str = self.post('/fmipservice/device/%s/initClient' % self.username, body, None, True)
+        body = json.dumps({})
+        header, json_str = self.post('/fmipservice/device/%s/initClient' % self.scope, body, None, True)
         json_obj = json.loads(json_str)
 
         if None == json_obj:
@@ -243,10 +222,10 @@ class FindMyIPhone(object):
         headers = headers or {}
         headers.update({
             'Content-type': 'application/json; charset=utf-8',
-            'X-Apple-Find-Api-Ver': '2.0',
+            'X-Apple-Find-Api-Ver': '3.0',
             'X-Apple-Authscheme': 'UserIdGuest',
             'X-Apple-Realm-Support': '1.0',
-            'User-agent': 'Find iPhone/1.2 MeKit (iPad: iPhone OS/4.2.1)',
+            'User-agent': 'FindMyiPhone/472.1 CFNetwork/711.1.12 Darwin/14.0.0',
             'X-Client-Name': 'iPad',
             'X-Client-UUID': '0cf3dc501ff812adb0b202baed4f37274b210853',
             'Accept-Language': 'en-us',
